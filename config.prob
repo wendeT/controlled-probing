@@ -1,0 +1,16 @@
+#Config file for prob_exper.py mode [train,evaluate]
+[parameter]
+mode = train
+model_path = model_out/
+train_data_path = all_samples/en_poly_train.csv
+test_data_path = all_samples/en_poly_test.csv
+check_point = xlm-roberta-base
+sample_size = []
+pad_length = 100
+split_ratio = 0.75
+classifier = mlp
+[mlp]
+mlp_num_run = 5
+mlp_iter = 100
+mlp_hiddent_unit = 1024
+mlp_activation = relu
