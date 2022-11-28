@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 import os
 
-
 import torch
 from transformers import AutoTokenizer, AutoModel
 
@@ -32,6 +31,7 @@ model = AutoModel.from_pretrained(check_point, output_hidden_states=True)
 log_prefix = configur.get('parameter', 'log_prefix')
 if not os.path.exists(log_prefix):
     os.makedirs(log_prefix)
+
 
 # TODO Setup ME into a project
 # TODO add mode for train and evaluation
@@ -95,7 +95,7 @@ def _evaluate_run(clf_model, test_features, test_labels):
 
 
 def _save_model(_model, classifier_identifier):
-    model_direct = log_prefix+'_model_out/'
+    model_direct = log_prefix + '_model_out/'
     if not os.path.exists(model_direct):
         os.makedirs(model_direct)
     model_path = model_direct + classifier_identifier + '_' + '.pkl'
@@ -292,11 +292,11 @@ def main():
     log_file_name = log_file_name.replace('.csv', '')
 
     # Write Result log
-    result_file_name = log_prefix +'/_result_' + log_file_name + '.csv'
+    result_file_name = log_prefix + '/_result_' + log_file_name + '.csv'
     pd_result.to_csv(result_file_name)
 
     # Write Prediction log
-    pred_file_name = log_prefix +'/_prediction_' + log_file_name + '.csv'
+    pred_file_name = log_prefix + '/_prediction_' + log_file_name + '.csv'
     pd_prediction.to_csv(pred_file_name)
 
 
