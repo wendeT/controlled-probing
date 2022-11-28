@@ -1,4 +1,3 @@
-# Cloned
 import pickle
 import statistics
 import time
@@ -8,6 +7,7 @@ from warnings import simplefilter
 import numpy as np
 import pandas as pd
 import os
+
 
 import torch
 from transformers import AutoTokenizer, AutoModel
@@ -28,8 +28,12 @@ check_point = configur.get('parameter', 'check_point')
 tokenizer = AutoTokenizer.from_pretrained(check_point)
 model = AutoModel.from_pretrained(check_point, output_hidden_states=True)
 
-
-# TODO Setup this into a project
+#
+log_prefix = configur.get('parameter', 'log_prefix')
+if not os.path.exists(log_prefix):
+    os.makedirs(log_prefix)
+# Keep the latest
+# TODO Setup ME into a project
 # TODO add mode for train and evaluation
 # TODO setup a separate project for this
 # TODO the result into csv - with micro,macro,std-deviation and all layers **DONE
@@ -91,7 +95,7 @@ def _evaluate_run(clf_model, test_features, test_labels):
 
 
 def _save_model(_model, classifier_identifier):
-    model_direct = 'model_out/'
+    model_direct = log_prefix+'_model_out/'
     if not os.path.exists(model_direct):
         os.makedirs(model_direct)
     model_path = model_direct + classifier_identifier + '_' + '.pkl'
@@ -159,19 +163,6 @@ def _mlp_classifier(train_features, train_labels, test_features, test_labels, cl
     mean_weighted_f1 = round(statistics.mean(f1_weighted_ls), 2)
     std_dev = round(statistics.stdev(f1_macro_ls), 3)
     return mean_micro_f1, mean_macro_f1, mean_weighted_f1, std_dev, prediction_ls, classification_rep
-
-
-def _fixed_split(layer_token_rep, labels):
-    split_ratio = float(configur.get('parameter', 'split_ratio'))
-    print(' _fixed_split ')
-    print('     $$$$$$ len(layer_token_rep) ', len(layer_token_rep))
-    train_split = int(split_ratio * len(layer_token_rep))
-    train_features = layer_token_rep[:train_split]
-    test_features = layer_token_rep[train_split:]
-    train_labels = labels[:train_split]
-    test_labels = labels[train_split:]
-    print('         len(test_features) ', len(test_labels))
-    return [train_features, test_features, train_labels, test_labels]
 
 
 def _shuffle(train_features_l0):
@@ -299,12 +290,13 @@ def main():
     pd_prediction['Gold_Labels'] = gold_labels
     log_file_name = test_data_path.split('/')[1]
     log_file_name = log_file_name.replace('.csv', '')
+
     # Write Result log
-    result_file_name = 'log/_result_' + log_file_name + '.csv'
+    result_file_name = log_prefix +'/_result_' + log_file_name + '.csv'
     pd_result.to_csv(result_file_name)
 
     # Write Prediction log
-    pred_file_name = 'log/_prediction_' + log_file_name + '.csv'
+    pred_file_name = log_prefix +'/_prediction_' + log_file_name + '.csv'
     pd_prediction.to_csv(pred_file_name)
 
 
