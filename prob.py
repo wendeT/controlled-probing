@@ -33,7 +33,6 @@ if not os.path.exists(log_prefix):
     os.makedirs(log_prefix)
 
 
-# TODO Setup ME into a project
 # TODO add mode for train and evaluation
 # TODO setup a separate project for this
 # TODO the result into csv - with micro,macro,std-deviation and all layers **DONE
