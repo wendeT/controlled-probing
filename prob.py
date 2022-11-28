@@ -33,12 +33,9 @@ if not os.path.exists(log_prefix):
     os.makedirs(log_prefix)
 
 
-# TODO add mode for train and evaluation
-# TODO setup a separate project for this
-# TODO the result into csv - with micro,macro,std-deviation and all layers **DONE
+# TODO split code into train and test
 # TODO add self-similarity (Refer the paper)
-# TODO add controll task of some kind
-# TODO push to git
+# TODO add controll task
 
 def _index_of_entity(row_index, batch_1):
     sent = batch_1.iloc[row_index]['sentence']
