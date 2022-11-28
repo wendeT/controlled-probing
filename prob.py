@@ -103,18 +103,14 @@ def _save_model(_model, classifier_identifier):
 
 
 def _test_model(test_features, test_labels, mlp_clf):
-
     print('    len(test_labels)', len(test_labels))
-    mlp_num_run = int(configur.get('mlp', 'mlp_num_run'))
-
     y_pred, f1_micro, f1_macro, f1_weighted, classification_rep = _evaluate_run(mlp_clf, test_features,
-                                                                        test_labels)
+                                                                                test_labels)
     temp_pred = y_pred.tolist()
-
-    print('             Raw f1_macro  ', f1_macro)
+    print('             Raw f1_micro  ', f1_micro)
     prediction_ls = temp_pred
     std_dev = 0.0
-    return f1_micro, macro_f1, f1_weighted, std_dev, prediction_ls, classification_rep
+    return f1_micro, f1_macro, f1_weighted, std_dev, prediction_ls, classification_rep
 
 
 def _mlp_classifier(train_features, train_labels, test_features, test_labels, classifier_identifier):
