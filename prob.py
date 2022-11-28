@@ -32,7 +32,7 @@ model = AutoModel.from_pretrained(check_point, output_hidden_states=True)
 log_prefix = configur.get('parameter', 'log_prefix')
 if not os.path.exists(log_prefix):
     os.makedirs(log_prefix)
-# Keep the latest
+
 # TODO Setup ME into a project
 # TODO add mode for train and evaluation
 # TODO setup a separate project for this
