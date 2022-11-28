@@ -110,20 +110,16 @@ def _test_model(test_features, test_labels, mlp_clf):
     mlp_num_run = int(configur.get('mlp', 'mlp_num_run'))
 
     classification_rep = {}
-    pred_per_run = []
-    for i in range(mlp_num_run):
-        y_pred, f1_micro, f1_macro, f1_weighted, classification_rep = _evaluate_run(mlp_clf, test_features,
-                                                                                    test_labels)
-        temp_pred = y_pred.tolist()
-        pred_per_run.append(temp_pred)
-        f1_micro_ls.append(f1_micro)
-        f1_macro_ls.append(f1_macro)
-        f1_weighted_ls.append(f1_weighted)
-        print('             Raw f1_macro @ ', i, ' ', f1_macro)
-    prediction_ls = pred_per_run[0]  # Return prediction of the first run
-    mean_micro_f1 = round(statistics.mean(f1_micro_ls), 2)
-    mean_macro_f1 = round(statistics.mean(f1_macro_ls), 2)
-    mean_weighted_f1 = round(statistics.mean(f1_weighted_ls), 2)
+    # pred_per_run = []
+    y_pred, f1_micro, f1_macro, f1_weighted, classification_rep = _evaluate_run(mlp_clf, test_features,
+                                                                                test_labels)
+    temp_pred = y_pred.tolist()
+
+    print('             Raw f1_macro @ ', , ' ', f1_macro)
+    prediction_ls = temp_pred
+    mean_micro_f1 = round(f1_micro, 2)
+    mean_macro_f1 = round(f1_macro, 2)
+    mean_weighted_f1 = round(f1_weighted, 2)
     std_dev = round(statistics.stdev(f1_macro_ls), 3)
     return mean_micro_f1, mean_macro_f1, mean_weighted_f1, std_dev, prediction_ls, classification_rep
 
@@ -135,13 +131,13 @@ def _mlp_classifier(train_features, train_labels, test_features, test_labels, cl
     print('    len(test_labels)', len(test_labels))
     mlp_num_run = int(configur.get('mlp', 'mlp_num_run'))
     mlp_iter = int(configur.get('mlp', 'mlp_iter'))
-    mlp_hiddent_unit = int(configur.get('mlp', 'mlp_hiddent_unit'))
+    mlp_hidden_unit = int(configur.get('mlp', 'mlp_hidden_unit'))
     mlp_activation = configur.get('mlp', 'mlp_activation')
     classification_rep = {}
     pred_per_run = []
     all_models = []
     for i in range(mlp_num_run):
-        mlp_clf = MLPClassifier(hidden_layer_sizes=(mlp_hiddent_unit,), max_iter=mlp_iter, activation=mlp_activation,
+        mlp_clf = MLPClassifier(hidden_layer_sizes=(mlp_hidden_unit,), max_iter=mlp_iter, activation=mlp_activation,
                                 random_state=i)
         mlp_clf.fit(train_features, train_labels)
         # Save the model
@@ -265,8 +261,9 @@ def main():
                 class_model_name)
         else:
             model_path = configur.get('parameter', 'model_path')
-            model_full_path = model_path + layer_name + '_' + '.pkl'
-            print('Evaluating ', model_full_path)
+            model_full_path = model_path + '/' + layer_name + '_' + '.pkl'
+            print('     Evaluating ', model_full_path)
+
             mlp_clf = pickle.load(open(model_full_path, 'rb'))
             mean_micro_f1, mean_macro_f1, mean_weighted_f1, std_dev, prediction_ls, classification_rep = _test_model(
                 test_layer_token_rep, test_labels, mlp_clf)
@@ -291,12 +288,14 @@ def main():
     log_file_name = log_file_name.replace('.csv', '')
 
     # Write Result log
+
     result_file_name = log_prefix + '/_result_' + log_file_name + '.csv'
     pd_result.to_csv(result_file_name)
-
+    print('result_file_name written to ', result_file_name)
     # Write Prediction log
     pred_file_name = log_prefix + '/_prediction_' + log_file_name + '.csv'
     pd_prediction.to_csv(pred_file_name)
+    print('pred_file_name written to ', pred_file_name)
 
 
 if __name__ == "__main__":
