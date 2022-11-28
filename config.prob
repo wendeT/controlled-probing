@@ -1,6 +1,6 @@
 #Config file for prob_exper.py mode [train,evaluate]
 [parameter]
-mode = train
+mode = test
 model_path = model_out/
 train_data_path = data/en_mono_train.csv
 test_data_path = data/en_mono_test.csv
