@@ -35,7 +35,7 @@ if not os.path.exists(log_prefix):
 
 # TODO split code into train and test
 # TODO add self-similarity (Refer the paper)
-# TODO add controll task
+# TODO add control task
 
 def _index_of_entity(row_index, batch_1):
     sent = batch_1.iloc[row_index]['sentence']
@@ -107,6 +107,9 @@ def _test_model(test_features, test_labels, mlp_clf):
     print('             Raw f1_micro  ', f1_micro)
     prediction_ls = temp_pred
     std_dev = 0.0
+    f1_micro = round(f1_micro, 2)
+    f1_macro = round(f1_macro, 2)
+    f1_weighted = round(f1_weighted, 2)
     return f1_micro, f1_macro, f1_weighted, std_dev, prediction_ls, classification_rep
 
 
